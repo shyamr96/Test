@@ -1,1 +1,98 @@
+contacts = []
 
+
+class Contact:
+
+    def __init__(self, first_name, last_name, m_number, user_email):
+        self.fname = first_name
+        self.lname = last_name
+        self.mnumber = m_number
+        self.email = user_email
+
+    def save_contact(self):
+        contact = ({"First_Name": self.fname, "Last_Name": self.lname, "Email": self.email, "Number": self.mnumber})
+        contacts.append(contact)
+
+
+def detail_contact():
+    c = input("write the name or number here: ")
+    # Read the data
+    outfile = open('C:\\Users\\admin\\PycharmProjects\\Python_Crash_Course\\contact3.txt', 'r')
+    data = outfile.readlines()
+    outfile.close()
+
+    for line in data:
+        if c in line:
+            person_name = line
+            print(person_name)
+
+
+def delete_contact():
+    with open("C:\\Users\\admin\\PycharmProjects\\Python_Crash_Course\\contact3.txt", "r") as r:
+        data = r.readlines()
+        c = input("write word here: ")
+        for lines in data:
+            if c in lines:
+                person_name = lines
+                print(person_name)
+                repeat = input("sure you want to delete this contact (yes or no): ")
+                if repeat == "yes":
+                    data.remove(person_name)
+                    print("contact is deleted")
+                    with open("C:\\Users\\admin\\PycharmProjects\\Python_Crash_Course\\contact3.txt", "w") as s:
+                        for line in data:
+                            s.write(line)
+                        s.close()
+                else:
+                    continue
+
+
+def new_contact():
+    active = True
+    while active:
+        fname = input("write your first name: ")
+        if fname == '':
+            print("it can't be empty")
+            continue
+        lname = input("write your last name: ")
+        flag = True
+        while flag:
+            mnumber = input("write your number: ")
+            if len(mnumber) != 10:
+                print("enter valid number")
+                continue
+            email = input("write your email: ")
+            c1 = Contact(fname, lname, mnumber, email)
+            print(c1.fname, c1.lname, c1.mnumber, c1.email)
+            c1.save_contact()
+            repeat = input("add another contact yes or no: ")
+            if repeat == "yes":
+                flag = False
+            elif repeat == "no":
+                active = False
+                break
+
+
+while True:
+    v = int(input("""    1 for New Contact
+    2 for Detail of Contact
+    3 for Delete Contact
+    4 for Edit Contact
+    0 for Quit
+    Here: """))
+    if v == 1:
+        new_contact()
+    elif v == 2:
+        detail_contact()
+    elif v == 3:
+        delete_contact()
+    elif v == 4:
+        print("coming soon")
+    elif v == 0:
+        break
+
+
+with open("contact3.txt", 'a+') as f:
+    for item in contacts:
+        f.write("%s" % item + "\n")
+    f.close()
